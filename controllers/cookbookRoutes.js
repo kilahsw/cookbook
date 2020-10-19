@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Cookbook = require('../../models/Cookbook');
+const Cookbook = require('../models/Cookbook');
 
 // Write the route to list all cookbooks
 router.get("/", (req, res) => {
