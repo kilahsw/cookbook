@@ -1,43 +1,47 @@
-const express = require("express");
-const router = express.Router();
-const Cookbook = require('../models/Cookbook');
+const express = require('express')
+const router = express.Router()
+//import db connection
+const mongoose = require('../db/connection')
+//create db connection
+const db = mongoose.connection
+//import cookbook model
+const Cookbook = require('../models/Cookbook')
+//import seed data
+const seedData = require('../db/seed')
 
 // Write the route to list all cookbooks
-router.get("/", (req, res) => {
-    Cookbook.find({}).then((cookbooks) => {
-        res.json(cookbooks);
-    });
+router.get(`/`, async (req, res) => {
+    const cookbook = await Cookbook.find({});
+    res.json({ status: 200, data: cookbook });
 });
-// Write the route to get cookbook by title
-router.get("/title/:title", (req, res) => {
 
-    Cookbook.find({ title: req.params.title }).then((cookbook) => {
-        res.json(cookbook);
-    });
+// Write the route to get cookbook by title
+router.get('/:title', async (req, res) => {
+    const cookbook = await Cookbook.find(req.params.title);
+    res.json({ status: 200, data: cookbook });
 });
+
 // Write the route to get cookbook by year published
-router.get("/year/:year", (req, res) => {
-    Cookbook.find({ yearPublished: req.params.year }).then((cookbooks) => {
-        res.json(cookbooks);
-    });
+router.get("/year/:yearPublished", async (req, res) => {
+    const cookbook = await Cookbook.find(req.params.yearPublished);
+    res.json({ status: 200, data: cookbook });
 });
 // Write the route to create a cookbook
-router.post("/", (req, res) => {
-    Cookbook.create(req.body).then((cookbook) => {
-        res.json(cookbook);
-    });
+router.post(`/`, async (req, res) => {
+    const cookbook = await Cookbook.create(req.body);
+    res.json({ status: 200, data: cookbook });
 });
+
 // Write the route to update a cookbook
-router.put("/:id", (req, res) => {
-    Cookbook.findByIdAndUpdate(req.params.id, req.body).then((cookbook) => {
-        res.json(cookbook);
-    });
+router.put('/:title', async (req, res) => {
+    const cookbook = await Cookbook.findByIdAndUpdate(req.params.id);
+    res.json({ status: 200, data: cookbook });
 });
+
 // Write the route to delete the cookbook by title
-router.delete("/:title", (req, res) => {
-    Cookbook.deleteOne({ title: req.params.title }).then((cookbook) => {
-        res.json(cookbook);
-    });
+router.delete('/:title', async (req, res) => {
+    const cookbook = await Cookbook.findByIdAndDelete(req.params.id);
+    res.json({ status: 200, data: cookbook });
 });
 
 module.exports = router;

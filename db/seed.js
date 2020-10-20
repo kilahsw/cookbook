@@ -1,8 +1,8 @@
 const Author = require('../models/Author')
 const Cookbook = require('../models/Cookbook')
 
-Author.find({}).remove(() => {
-  Cookbook.find({}).remove(() => {
+Author.find({}).deleteMany(() => {
+  Cookbook.find({}).deleteMany(() => {
     let meera = Author.create({
       firstName: 'meera',
       lastName: 'sodha'

@@ -1,5 +1,6 @@
 //Import connection
 const mongoose = require('../db/connection');
+const Schema = mongoose.Schema
 
 /* Create Author as new schema
     properties:
@@ -20,5 +21,5 @@ const AuthorSchema = new mongoose.Schema({
 
 
 //export model named "Author"
-Author = mongoose.model('Authors', AuthorSchema);
+Author = mongoose.model('Author', AuthorSchema);
 module.exports = Author;

@@ -1,47 +1,44 @@
-const express = require("express");
-const router = express.Router();
-const Author = require('../models/Author');
-const Cookbook = require("../models/Cookbook");
+const express = require('express')
+const router = express.Router()
+//import db connection
+const mongoose = require('../db/connection')
+//create db connection
+const db = mongoose.connection
+//import author model
+const Author = require('../models/Author')
+//import seed data
+const seedData = require('../db/seed')
+
 // Write the route to list all authors
-router.get("/", (req, res) => {
-    Author.find({}).then((authors) => {
-        res.json(authors);
+router.get(`/`, async (req, res) => {
+    const allAuthors = await Author.find({});
+    res.json({
+        status: 200,
+        data: allAuthors,
     });
 });
 // Write the route to get authors by firstname
-router.get("/:name", (req, res) => {
-    Author.find({ firstName: req.params.name }).then((authors) => {
-        res.json(authors);
-    });
-});
+router.get('/:firstName', async (req, res) => {
+    const author = await Author.find({ firstName: req.params.firstName })
+    res.json({
+        status: 200, data: author
+    })
+})
+
 // Write the route to create an author:
-router.post("/", (req, res) => {
-    Author.create(req.body).then((author) => {
-        res.json(author);
-    });
-});
-// Write the route to update an author
-router.put("/:name", (req, res) => {
-    Author.findOneAndUpdate({ firstName: req.params.name }, req.body).then(
-        (author) => {
-            res.json(author);
-        }
-    );
+router.post(`/`, async (req, res) => {
+    const author = await Author.create(req.body);
+    res.json({ status: 200, data: author });
 });
 
-//Write a route to delete an author
-router.delete("/:id", (req, res) => {
-    Author.delete({ _id: req.params.id }).then((author) => {
-        res.json(author);
+// Write the route to update an author
+router.put(`/:id`, async (req, res) => {
+    const author = await Author.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
     });
+    res.json({ status: 200, data: author });
 });
-// Write the route to get all
-router.get("/:id/cookbooks", (req, res) => {
-    Author.find({ _id: req.params.id })
-        .populate("cookbooks")
-        .then((authors) => {
-            res.json(authors);
-        });
-});
+
+
 
 module.exports = router;
